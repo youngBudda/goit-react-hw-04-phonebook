@@ -5,18 +5,14 @@ import Form from './Form/Form';
 import ContactList from './ContactList/ContactList';
 
 export function App() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(
+    () => JSON.parse(localStorage.getItem('contacts')) || []
+  );
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const storageContacts = localStorage.getItem('contacts');
-    storageContacts && setContacts(JSON.parse(storageContacts));
-  }, [setContacts]);
-
-  useEffect(() => {
-    if (!contacts.length) return;
     localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts, filter]);
+  }, [contacts]);
 
   const onDeleteContact = id => {
     setContacts(prevState => prevState.filter(contact => contact.id !== id));
